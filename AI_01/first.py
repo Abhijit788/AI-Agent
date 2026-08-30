@@ -1,8 +1,9 @@
 from openai import OpenAI
 import time
+import os
 client = OpenAI(
     base_url="http://localhost:11434/v1",
-    api_key="ollama"
+    api_key=os.getenv("OLLAMA_API_KEY")
 )
 
 while True:

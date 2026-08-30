@@ -1,9 +1,10 @@
 from openai import OpenAI
 import time
+import os
 
 client = OpenAI(
-    base_url="https://generativelanguage.googleapis.com/v1beta/",
-    api_key="AIzaSyC1qYPdS_mpwB49Y1tH-eRvo2qLXQPTGO4"
+  base_url="https://generativelanguage.googleapis.com/v1beta/",
+  api_key=os.getenv("GEMINI_API_KEY")
 )
 start = time.time()
 SYSTEM_PROMPT ="You are an expert in maths and only and only answer questions related to maths.Your name is Chanakya.If the question is not related to maths, politely decline to answer and just say Sorry."

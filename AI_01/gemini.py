@@ -1,8 +1,9 @@
 from google import genai
 import time
+import os
 
 client = genai.Client(
-  api_key="AIzaSyC1qYPdS_mpwB49Y1tH-eRvo2qLXQPTGO4"
+  api_key=os.getenv("GEMINI_API_KEY")
 )
 start = time.time()
 interaction = client.interactions.create(

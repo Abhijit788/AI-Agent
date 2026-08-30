@@ -2,9 +2,10 @@
 
 import time
 from openai import OpenAI
+import os
 client = OpenAI(
     base_url="https://generativelanguage.googleapis.com/v1beta/",
-    api_key="AIzaSyC1qYPdS_mpwB49Y1tH-eRvo2qLXQPTGO4"
+    api_key=os.getenv("GEMINI_API_KEY")
 )
 
 start = time.time()

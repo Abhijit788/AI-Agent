@@ -4,9 +4,10 @@
 import time
 from openai import OpenAI
 import json
+import os
 client = OpenAI(
-    base_url="https://generativelanguage.googleapis.com/v1beta/",
-    api_key="AIzaSyC1qYPdS_mpwB49Y1tH-eRvo2qLXQPTGO4"
+  base_url="https://generativelanguage.googleapis.com/v1beta/",
+  api_key=os.getenv("GEMINI_API_KEY")
 )
 
 start = time.time()
@@ -45,8 +46,43 @@ response = client.chat.completions.create(
         },
         {
             "role": "user",
-            "content": "Can you write me a java program to calculate the lenght of the smallest palindrome substring in a given string?"
+            "content": "Can you write me a java program to calculate sum of n numbers?"
         },
+        {
+          "role":"assistant",
+          "content": json.dumps({
+            "step": "START",
+            "content": "You are asking for a Java program to calculate the sum of n numbers. Let's PLAN how to approach this problem."
+          })
+        },
+        {
+          "role":"assistant",
+          "content": json.dumps({
+            "step": "PLAN",
+            "content": "We need to create a Java program that takes an integer n as input and calculates the sum of the first n natural numbers."
+          })
+        },
+        {
+          "role":"assistant",
+          "content": json.dumps({
+            "step": "PLAN",
+            "content": "The formula for the sum of the first n natural numbers is n * (n + 1) / 2. We can use this formula in our program."
+          })
+        },
+        {
+          "role":"assistant",
+          "content": json.dumps({
+            "step": "PLAN",
+            "content": "We will write a Java program that prompts the user for input, calculates the sum using the formula, and then prints the result."
+          })
+        },
+        {
+            "role":"assistant",
+            "content": json.dumps({
+                "step": "OUTPUT",
+                "content": "Here is the Java program to calculate the sum of n numbers:\n\n```java\nimport java.util.Scanner;\n\npublic class SumOfNNumbers {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        System.out.print(\"Enter a positive integer n: \");\n        int n = scanner.nextInt();\n        int sum = n * (n + 1) / 2;\n        System.out.println(\"The sum of the first \" + n + \" natural numbers is: \" + sum);\n        scanner.close();\n    }\n}\n```\n\nThis program will prompt the user to enter a positive integer n, calculate the sum using the formula, and print the result."
+            })
+        }
     ]
 )
 end = time.time()
