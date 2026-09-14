@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 
 load_dotenv()  # Load environment variables from .env file
 
-weather_api_key = os.getenv("weather_api_key")  # Get the weather API key from environment variables
+weather_api_key = os.getenv("WEATHER_API_KEY")  # Get the weather API key from environment variables
 client = Client(host="http://localhost:11434")
 
 # response = client.chat(
@@ -44,17 +44,34 @@ def extract_forecast(tool_result, requested_date):
 
     return None
 
+def get_current_weather_info(location):
+    url = f"https://api.weatherapi.com/v1/current.json?key={weather_api_key}&q={location}"
+    response = requests.get(url)
+    if response.status_code == 200:
+        res_json = response.json()
+        return {
+            "location": res_json["location"]["name"],
+            "country": res_json["location"]["country"],
+            "date": res_json["current"]["last_updated"].split(" ")[0],
+            "temperature_c": res_json["current"]["temp_c"],
+            "condition": res_json["current"]["condition"]["text"],
+            "humidity": res_json["current"]["humidity"],
+            "wind_kph": res_json["current"]["wind_kph"]
+        }
+    return None
+
 location = "New York"
 date = "2026-08-31"
-url = f"https://api.weatherapi.com/v1/forecast.json?key={weather_api_key}&q={location}&dt={date}"
+# url = f"https://api.weatherapi.com/v1/forecast.json?key={weather_api_key}&q={location}&dt={date}"
 
-url2 = f"https://api.weatherapi.com/v1/current.json?key={weather_api_key}&q={location}"
+# url2 = f"https://api.weatherapi.com/v1/current.json?key={weather_api_key}&q={location}"
 
-res= requests.get(url)
-json_res = json.loads(res.content)
-# print(json_res)
+# res= requests.get(url)
+# json_res = json.loads(res.content)
+# # print(json_res)
 
-print(extract_forecast(json_res, date))
+# print(extract_forecast(json_res, date))
 
-
-
+url = f"https://api.weatherapi.com/v1/current.json?key={weather_api_key}&q={location}"
+response = requests.get(url)
+print(response.status_code)
