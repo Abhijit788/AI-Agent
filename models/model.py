@@ -8,3 +8,9 @@ class CurrentWeatherInput(BaseModel):
 class FutureWeatherInput(BaseModel):
     location: str
     date: str
+
+
+
+class ConversationManager(BaseModel):
+    def __init__(self):
+        self.conversations = {}
