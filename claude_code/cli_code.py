@@ -6,6 +6,29 @@ import subprocess
 import json
 
 
+class ConversationMemory:
+
+    def __init__(self, system_prompt):
+        self.system_prompt = system_prompt
+        self.messages = []
+
+    def add(self, role, content):
+        self.messages.append({
+            "role": role,
+            "content": content
+        })
+
+    def get_context(self):
+        return [
+            {
+                "role": "system",
+                "content": self.system_prompt
+            },
+            *self.messages
+        ]
+    
+
+
 # --------------------------------------------------
 # Configuration
 # --------------------------------------------------
@@ -222,12 +245,7 @@ The user's shell is PowerShell.
 # --------------------------------------------------
 # Agent
 # --------------------------------------------------
-messages = [
-        {
-            "role": "system",
-            "content": SYSTEM_PROMPT
-        },
-    ]
+memory = ConversationMemory(SYSTEM_PROMPT)
 
 while True:
 
@@ -237,16 +255,14 @@ while True:
         print("Goodbye!")
         break
 
-    messages.append({
-        "role": "user",
-        "content": user_input
-    })
+    memory.add("user", user_input)
+
     while True:
 
         try:
             response = client.chat.completions.create(
                 model=GROQ_MODEL,
-                messages=messages,
+                messages=memory.get_context(),
                 tools=TOOLS,
                 tool_choice="auto",
             )
